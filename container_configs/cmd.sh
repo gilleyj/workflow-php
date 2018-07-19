@@ -3,9 +3,9 @@
 file="/etc/nginx/conf.d/default.conf.${APP_ENV:-prod}"
 
 if [ -f ${file} ]; then
-	mv ${file} /etc/nginx/conf.d/default.conf
+	cp ${file} /etc/nginx/conf.d/default.conf
 else
-	mv /etc/nginx/conf.d/default.conf.prod /etc/nginx/conf.d/default.conf
+	cp /etc/nginx/conf.d/default.conf.prod /etc/nginx/conf.d/default.conf
 fi
 
 echo ${file}
