@@ -1,10 +1,10 @@
 .DEFAULT_GOAL := help
 
-DOCKERFILE = Dockerfile-base
+DOCKERFILE = Dockerfile
 ORG = gilleyj
 NAME = workflow-php
 IMAGE = $(ORG)/$(NAME)
-VERSION = 0.0.1
+VERSION = 0.0.4
 PORT_INT = 80
 PORT_EXT = 8020
 
