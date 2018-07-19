@@ -51,6 +51,7 @@ COPY ./container_configs/nginx.conf /etc/nginx/nginx.conf
 COPY ./container_configs/default.conf.prod /etc/nginx/conf.d/default.conf.prod
 COPY ./container_configs/default.conf.dev /etc/nginx/conf.d/default.conf.dev
 COPY ./container_configs/cmd.sh /cmd.sh
+COPY ./container_configs/app.php /app/web/app.php
 
 # Report on PHP build
 RUN chmod a+x /cmd.sh && \

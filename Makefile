@@ -9,22 +9,19 @@ PORT_INT = 80
 PORT_EXT = 8020
 
 build: ## Build it
-	docker build --force-rm -t $(IMAGE):local -f $(DOCKERFILE) .
-
-build-squash: ## Build it
 	docker build --squash --force-rm -t $(IMAGE):local -f $(DOCKERFILE) .
 
 rebuild: ## Rebuild it without using cache
 	docker build --no-cache --pull --squash --force-rm -t $(IMAGE):local -f $(DOCKERFILE) .
 
 tag: ## Tag it with $(VERSION)
-	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
+	docker tag $(IMAGE):local $(IMAGE):$(VERSION)
 
 run: ## run it
 	docker run -p $(PORT_EXT):$(PORT_INT) --name $(NAME)_run --rm -it $(IMAGE):local
 
 runvolume: ## run it with code volume attached
-	docker run -p $(PORT_EXT):$(PORT_INT) --name $(NAME)_run -v ${PWD}/code:/app/code --rm -id $(IMAGE)
+	docker run -p $(PORT_EXT):$(PORT_INT) --name $(NAME)_run -v ${PWD}/code:/app --rm -id $(IMAGE):local
 
 runshell: ## run the container with an interactive shell
 	docker run -p $(PORT_EXT):$(PORT_INT) --name $(NAME)_run --rm -it $(IMAGE):local /bin/sh
@@ -40,13 +37,11 @@ kill: ## kill it
 
 test: ## Simple tests
 	docker build -t php_nginx_test .
-	docker run -d -p 127.0.0.1:8880:80 --name php_nginx_test php_nginx_test
+	docker run --rm -d -p 127.0.0.1:8880:80 --name php_nginx_test php_nginx_test
 	sleep 5
 	curl -vsf --head -H 'Accept-Encoding: gzip' 'http://127.0.0.1:8880/' &> /dev/stdout
 	curl -vsf --head 'http://127.0.0.1:8880/' &> /dev/stdout
 	docker kill php_nginx_test
-	docker rm php_nginx_test
-	docker rmi php_nginx_test
 
 release: tag ## Create and push release to docker hub
 	@if ! docker images $(IMAGE) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi

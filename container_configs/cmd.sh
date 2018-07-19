@@ -8,7 +8,7 @@ else
 	cp /etc/nginx/conf.d/default.conf.prod /etc/nginx/conf.d/default.conf
 fi
 
-echo ${file}
+echo copying ${file}....
 
 /usr/local/sbin/php-fpm --daemonize &
 /usr/sbin/nginx -g "daemon off;"
